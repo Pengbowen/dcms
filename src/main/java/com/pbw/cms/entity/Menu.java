@@ -37,7 +37,9 @@ public class Menu {
     @Column
     private String icon;
 
-    @OneToMany
+    @Column Integer sort;
+
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "pid")
     private List<Menu> list;
 }

@@ -1,0 +1,153 @@
+
+<title>网站用户</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>设置</cite></a>
+        <a><cite>菜单设置</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-btn-group">
+        <button class="layui-btn" id="btn-expand">全部展开</button>
+        <button class="layui-btn" id="btn-fold">全部折叠</button>
+    </div>
+
+    <table id="auth-table" class="layui-table" lay-filter="auth-table"></table>
+</div>
+
+
+
+<form class="layui-form" action="" id="addForm" style="display: none;">
+    <div class="layui-form-item" style="margin-top: 20px" pane>
+        <label class="layui-form-label">菜单名称</label>
+        <div class="layui-input-inline">
+            <input type="text" name="title" id="title" required  lay-verify="required" placeholder="请输入菜单名称" autocomplete="off" class="layui-input">
+        </div>
+        <div class="layui-form-mid layui-word-aux">必填</div>
+    </div>
+    <div class="layui-form-item" pane>
+        <label class="layui-form-label">菜单链接</label>
+        <div class="layui-input-inline">
+            <input type="text" name="href"  id="href" placeholder="请输入菜单链接" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <input type="text" name="pid" id="pid"   autocomplete="off" class="layui-input hide">
+    <input type="text" name="mid" id="mid"  autocomplete="off" class="layui-input hide">
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="formSubmit">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+<!-- 操作列 -->
+<script type="text/html" id="auth-state">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit" >修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script>
+    layui.use(['table', 'treetable','form','admin'], function () {
+        var $ = layui.jquery
+            ,admin = layui.admin
+            ,view = layui.view;
+        var table = layui.table;
+        var form = layui.form;
+        var treetable = layui.treetable;
+
+
+        // 渲染表格
+        layer.load(2);
+        treetable.render({
+            treeColIndex: 1,
+            treeSpid: 0,
+            treeIdName: 'id',
+            treePidName: 'pid',
+            elem: '#auth-table',
+            //url: './json/menus.json',
+            url: '/menu/listAll',
+            page: false,
+            cols: [[
+                {field: 'id',hide:true},
+                {field: 'title', minWidth: 200, title: '菜单'},
+                {field: 'jump', title: '菜单url'},
+                {field: 'icon', title: '图标'},
+                {field: 'sort', width:60, title: '序号'},
+                {toolbar: '#auth-state', width: 120, align: 'center', title: '操作'}
+            ]],
+            done: function () {
+                layer.closeAll('loading');
+            }
+        });
+
+        $('#btn-expand').click(function () {
+            treetable.expandAll('#auth-table');
+        });
+
+        $('#btn-fold').click(function () {
+            treetable.foldAll('#auth-table');
+        });
+
+        //监听工具条
+        table.on('tool(auth-table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var tr = obj.tr; //获得当前行 tr 的DOM对象
+
+            if(layEvent === 'del'){ //删除
+                layer.confirm('真的删除行么', function(index){
+                    obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                    layer.close(index);
+                    //向服务端发送删除指令
+                });
+            } else if(layEvent === 'edit'){ //编辑
+                addMenu();
+                //同步更新缓存对应的值
+                obj.update({
+                    username: '123'
+                    ,title: 'xxx'
+                });
+            }
+        });
+
+        /*添加菜单*/
+        function addMenu(othis){
+            admin.popup({
+                title: '添加文章'
+                ,area: ['550px', '550px']
+                ,id: 'LAY-popup-content-add'
+                ,success: function(layero, index){
+                    view(this.id).render('menu/add_menu').done(function(){
+                        form.render(null, 'layuiadmin-app-form-list');
+
+                        //监听提交
+                        form.on('submit(layuiadmin-app-form-submit)', function(data){
+                            var field = data.field; //获取提交的字段
+
+                            //提交 Ajax 成功后，关闭当前弹层并重载表格
+                            //$.ajax({});
+                            layui.table.reload('LAY-app-content-list'); //重载表格
+                            layer.close(index); //执行关闭
+                        });
+                    });
+                }
+            });
+        }
+
+    });
+    /**
+     * 初始化表单
+     */
+    function  resetForm() {
+        console.log("执行销毁方法")
+        $('#mid').val('');
+        $('#pid').val('');
+        $('#title').val('');
+        $('#href').val('');
+    }
+
+
+
+</script>

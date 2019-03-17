@@ -1,7 +1,7 @@
 {
-  "code": 0
-  ,"msg": ""
-  ,"data": [{
+  "code":0
+  ,"msg":""
+  ,"data":[{
     "title": "主页"
     ,"icon": "layui-icon-home"
     ,"list": [{
@@ -377,7 +377,11 @@
       },{
         "name": "email"
         ,"title": "邮件服务"
-      }]
+      },{
+            "name": "menu"
+            ,"title": "菜单管理"
+            ,"jump":"/menu/menulist"
+        }]
     },{
       "name": "user"
       ,"title": "我的设置"
