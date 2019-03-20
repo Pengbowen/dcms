@@ -26,20 +26,32 @@ public class Menu {
     private Long pid;
 
     @Column
-    private String name;
-
-    @Column
     private String title;
 
     @Column
-    private String jump;
+    private String path;
 
     @Column
     private String icon;
 
-    @Column Integer sort;
+    @Column
+    private Integer sort;
+
+    /**
+     * 模板组件地址
+     */
+    @Column
+    private String  component;
+
+    @Column
+    private Boolean open;
+
+    @Column
+    private Boolean blank;
+
+
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "pid")
-    private List<Menu> list;
+    private List<Menu> children;
 }

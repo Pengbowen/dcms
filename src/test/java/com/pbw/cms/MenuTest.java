@@ -18,12 +18,12 @@ public class MenuTest extends CmsApplicationTests {
     @Test
     public void addMenu(){
         menuRepository.deleteAll();
-
         Menu menu = new Menu();
         menu.setIcon("layui-icon-home");
         menu.setPid(0L);
         menu.setTitle("主页");
-        menu.setName("homepage");
+        menu.setBlank(false);
+        menu.setOpen(false);
         Menu save = menuRepository.save(menu);
 
     }
@@ -34,5 +34,14 @@ public class MenuTest extends CmsApplicationTests {
         for (Menu menu : all) {
             System.out.println(menu);
         }
+    }
+
+    @Test
+    public void test2(){
+        List<Menu> all = menuRepository.findAll();
+        all.forEach(menu->{
+            menu.setPath("#/layui/flow");
+        });
+        menuRepository.saveAll(all);
     }
 }
