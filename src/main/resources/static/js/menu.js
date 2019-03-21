@@ -185,7 +185,8 @@ layui.define(['jquery', 'utils', 'axios'], function(exports) { //提示：模块
         _.forEach(curr, function(item) {
           var open = item.open ? 'layui-show' : '';
           temp.push('<li class="kit-menu-item ' + open + '">');
-          var href = _.isEmpty(item.path) ? 'javascript:;' : item.path;
+          //在路径前边加上#,否则无法路由 [modify by pbw 2019年3月21日13:33:41]
+          var href = _.isEmpty(item.path) ? 'javascript:;' : '#'+item.path;
           if (item.blank) {
             temp.push('<a href="' + href + '" target="_blank">');
           } else {

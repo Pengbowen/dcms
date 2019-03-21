@@ -428,60 +428,7 @@
   <script>
     layui.config({
       base: 'js/'
-    }).use(['admin'],function () {
-        var route = layui.route;
-         var menu = layui.menu;
-         var $ = layui.$;
-         var routes = route.getRoutes();
-         console.log(routes);
-         // menu.set({
-         //          elem:'#menu-box',
-         //          dynamicRender:true,
-         //          remote:{
-         //              url:'/menu/listAllParent',
-         //              method:'get',
-         //              transformResponse:function (data) {
-         //                  var obj = JSON.parse(data);
-         //                  console.log(obj.data);
-         //                  return obj.data;
-         //              }
-         //          },
-         //          cache:false
-         //      });
-         //     menu.render();
-        // var axios = layui.axios;
-        // axios.get('/menu/listAllParent')
-        //     .then(function (response) {
-        //
-        //         var myRoutes = new Array();
-        //         $.each(response.data.data,function (i,v) {
-        //             $.each(v.children,function (_i,_v) {
-        //                 var route = {
-        //                     path:_v.path,
-        //                     component:_v.component,
-        //                     name:_v.title
-        //                 }
-        //                 myRoutes.push(route);
-        //             })
-        //         })
-        //         route.setRoutes({
-        //             name:'KITADMINROUTE',
-        //             routes:myRoutes
-        //         })
-        //         console.log(route.getRoutes());
-        //         menu.set({
-        //             elem:'#menu-box',
-        //             data:response.data.data,
-        //             dynamicRender:true,
-        //             cache:false
-        //         });
-        //         menu.render();
-        //
-        //     })
-        //     .catch(function (error) {
-        //         console.log(error);
-        //     });
-    });
+    }).use(['admin_my']);
   </script>
   <!-- endbuild -->
 </body>

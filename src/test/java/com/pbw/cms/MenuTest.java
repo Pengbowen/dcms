@@ -5,6 +5,8 @@ import com.pbw.cms.repository.MenuRepository;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
+import java.util.Random;
+
 /**
  * @Description
  * @Author 彭博文的计算机
@@ -39,8 +41,34 @@ public class MenuTest extends CmsApplicationTests {
     @Test
     public void test2(){
         List<Menu> all = menuRepository.findAll();
+        String [] arr = {
+                "/layui/flow",
+                "/layui/grid",
+                "/layui/tab",
+                "/layui/timeline",
+                "/layui/button",
+                "/layui/layer"
+        };
+
+        String [] arr1 = {
+                "views/layui/flow.html",
+                "views/layui/grid.html",
+                "views/layui/tab.html",
+                "views/layui/timeline.html",
+                "views/layui/button.html",
+                "views/layui/layer.html"
+        };
         all.forEach(menu->{
-            menu.setPath("#/layui/flow");
+            int i =  new Random().nextInt(6);
+            if (menu.getPid() == 0){
+                menu.setPath(null);
+            }else{
+                menu.setPath(arr[i]);
+                menu.setComponent(arr1[i]);
+            }
+            menu.setOpen(true);
+            menu.setBlank(false);
+
         });
         menuRepository.saveAll(all);
     }
