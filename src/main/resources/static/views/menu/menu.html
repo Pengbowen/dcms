@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="/css/treetable.css">
 <div class="layui-fluid">
 
-        <h1>
+        <h1 id="test">
             Layui树形表格treetable -
             <small><a href="https://gitee.com/whvse/treetable-lay" target="_blank">项目地址</a></small>
         </h1>
@@ -25,24 +25,24 @@
         <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
     </script>
-    <div class="box layui-hide" id="sdseadvd234">
-        <form class="layui-form layui-hide edit_box" id="edit_box" action="">
-            <div class="layui-form-item">
-                <label class="layui-form-label">单行输入框</label>
-                <div class="layui-input-block">
-                    <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">验证必填项</label>
-                <div class="layui-input-block">
-                    <input type="text" name="username" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
 
+</div>
+<div class="box" id="sdseadvd234">
+    <form class="layui-form  edit_box" id="edit_box" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">单行输入框</label>
+            <div class="layui-input-block">
+                <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">验证必填项</label>
+            <div class="layui-input-block">
+                <input type="text" name="username" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </form>
+</div>
 <script>
     layui.config({
         base: '/js/'
@@ -106,17 +106,35 @@
                 layer.msg('删除' + data.id);
             } else if (layEvent === 'edit') {
 
-                layui.sidebar.render({
-                    elem: this,
-                    //content:'',
-                    title: '修改菜单信息',
-                    shade: true,
-                    // shadeClose:false,
-                    // direction: 'left'
-                    dynamicRender: true,
-                    url: 'views/form/menu.html?id='+data.id,
-                    width: '25%', //可以设置百分比和px
-                });
+                layer.open({
+                    type:1,
+                    closeBtn: false,
+                    area: '300px;',
+                    id: 'LAY_layuipro_hash' //设定一个id，防止重复弹出
+                    ,
+                    btn: ['火速围观', '残忍拒绝'],
+                    btnAlign: 'c',
+                    moveType: 1 //拖拽模式，0或者1
+                    ,
+                    content:$('#sdseadvd234'),
+                    shade:false,
+                    success:function(layero) {
+                        var mask = $(".layui-layer-shade");
+                        mask.appenTo($('#sdseadvd234').parent());
+                        //其中：layero是弹层的DOM对象
+                    }
+                    })
+                // layui.sidebar.render({
+                //     elem: this,
+                //     //content:'',
+                //     title: '修改菜单信息',
+                //     shade: true,
+                //     // shadeClose:false,
+                //     // direction: 'left'
+                //     dynamicRender: true,
+                //     url: 'views/form/menu.html?id='+data.id,
+                //     width: '25%', //可以设置百分比和px
+                // });
             }
         });
     });
