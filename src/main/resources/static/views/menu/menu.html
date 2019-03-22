@@ -1,0 +1,123 @@
+
+<link rel="stylesheet" href="/css/treetable.css">
+<div class="layui-fluid">
+
+        <h1>
+            Layui树形表格treetable -
+            <small><a href="https://gitee.com/whvse/treetable-lay" target="_blank">项目地址</a></small>
+        </h1>
+        <br>
+        <div class="layui-btn-group">
+            <button class="layui-btn" id="btn-expand">全部展开</button>
+            <button class="layui-btn" id="btn-fold">全部折叠</button>
+            <button class="layui-btn" id="btn-refresh">刷新表格</button>
+        </div>
+        <div class="layui-btn-group">
+            <a class="layui-btn layui-btn-normal" href="menu.html">菜单管理</a>
+            <a class="layui-btn layui-btn-normal" href="test.html">深度测试</a>
+            <a class="layui-btn layui-btn-normal" href="test2.html">自定义图标</a>
+            <a class="layui-btn layui-btn-normal" href="test3.html">多表格</a>
+            <a class="layui-btn layui-btn-normal" href="test5.html">搜索功能</a>
+        </div>
+        <table id="table1" class="layui-table" lay-filter="table1"></table>
+    <!-- 操作列 -->
+    <script type="text/html" id="oper-col">
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
+    <div class="box layui-hide" id="sdseadvd234">
+        <form class="layui-form layui-hide edit_box" id="edit_box" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">单行输入框</label>
+                <div class="layui-input-block">
+                    <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">验证必填项</label>
+                <div class="layui-input-block">
+                    <input type="text" name="username" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    layui.config({
+        base: '/js/'
+    }).use(['layer', 'table', 'treetable'], function () {
+        var $ = layui.jquery;
+        var table = layui.table;
+        var layer = layui.layer;
+        var treetable = layui.treetable;
+
+        // 渲染表格
+        var renderTable = function () {
+            layer.load(2);
+            treetable.render({
+                treeColIndex: 1,//树形图标显示在第几列
+                treeSpid: 0,//最上级的父级id
+                treeIdName: 'id',//id字段的名称
+                treePidName: 'pid',//pid字段的名称
+                treeDefaultClose: false,//是否默认折叠
+                treeLinkage: false,//父级展开时是否自动展开所有子级
+                elem: '#table1',
+                url: '/menu/listAll',
+                page: false,
+                cols: [[
+                    {type: 'numbers'},
+                    {field: 'title', title: '菜单名称'},
+                    {field: 'id', title: 'id'},
+                    {field: 'path', title: '访问路径'},
+                    {field: 'icon', title: '图标'},
+                    {field: 'sort', title: '顺序号'},
+                    {field: 'component', title: '页面路径'},
+                    {field: 'open', title: '是否展开'},
+                    {field: 'blank', title: '是否打开新页面'},
+                    {templet: '#oper-col', title: 'oper'}
+                ]],
+                done: function () {
+                    layer.closeAll('loading');
+                }
+            });
+        };
+
+        renderTable();
+
+        $('#btn-expand').click(function () {
+            treetable.expandAll('#table1');
+        });
+
+        $('#btn-fold').click(function () {
+            treetable.foldAll('#table1');
+        });
+
+        $('#btn-refresh').click(function () {
+            renderTable();
+        });
+
+        //监听工具条
+        table.on('tool(table1)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+
+            if (layEvent === 'del') {
+                layer.msg('删除' + data.id);
+            } else if (layEvent === 'edit') {
+
+                layui.sidebar.render({
+                    elem: this,
+                    //content:'',
+                    title: '修改菜单信息',
+                    shade: true,
+                    // shadeClose:false,
+                    // direction: 'left'
+                    dynamicRender: true,
+                    url: 'views/form/menu.html?id='+data.id,
+                    width: '25%', //可以设置百分比和px
+                });
+            }
+        });
+    });
+</script>

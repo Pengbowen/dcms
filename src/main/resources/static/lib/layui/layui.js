@@ -1,7 +1,7 @@
 /*!
 
  @Title: Layui
- @Description：经典模块化前端框架
+ @Decription：经典模块化前端框架
  @Site: www.layui.com
  @Author: 贤心
  @License：MIT

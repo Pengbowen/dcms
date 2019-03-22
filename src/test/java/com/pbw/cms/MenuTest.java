@@ -43,23 +43,15 @@ public class MenuTest extends CmsApplicationTests {
         List<Menu> all = menuRepository.findAll();
         String [] arr = {
                 "/layui/flow",
-                "/layui/grid",
-                "/layui/tab",
-                "/layui/timeline",
-                "/layui/button",
-                "/layui/layer"
+                "/menu/list"
         };
 
         String [] arr1 = {
                 "views/layui/flow.html",
-                "views/layui/grid.html",
-                "views/layui/tab.html",
-                "views/layui/timeline.html",
-                "views/layui/button.html",
-                "views/layui/layer.html"
+                "views/menu/menu.html",
         };
         all.forEach(menu->{
-            int i =  new Random().nextInt(6);
+            int i =  new Random().nextInt(2);
             if (menu.getPid() == 0){
                 menu.setPath(null);
             }else{

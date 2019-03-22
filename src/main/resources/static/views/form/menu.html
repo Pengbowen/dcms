@@ -1,0 +1,93 @@
+<!-- 模板 -->
+
+<div class="layui-fluid">
+  <div class="layui-row">
+    <div class="layui-col-xs12">
+      <div class="layui-card">
+        <div class="layui-card-header">菜单信息</div>
+        <div class="layui-card-body">
+          <form class="layui-form" action="">
+            <div class="layui-form-item">
+              <label class="layui-form-label">菜单名称</label>
+              <div class="layui-input-inline">
+                <input type="text" name="title" required lay-verify="required" placeholder="请输入菜单名称" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">访问路径</label>
+              <div class="layui-input-inline">
+                <input type="text" name="path" required lay-verify="required" placeholder="请输入访问路径" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+            <div class="layui-form-item">
+            <label class="layui-form-label">页面路径</label>
+            <div class="layui-input-inline">
+              <input type="text" name="component" required lay-verify="required" placeholder="请输入页面路径" autocomplete="off" class="layui-input">
+            </div>
+          </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">显示顺序</label>
+              <div class="layui-input-inline">
+                <input type="text" name="sort" required lay-verify="required" placeholder="请输入显示顺序" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">是否展开</label>
+              <div class="layui-input-block">
+                <input type="checkbox" name="open" lay-skin="switch">
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">是否新标签页打开</label>
+              <div class="layui-input-block">
+                <input type="checkbox" name="blank" lay-skin="switch">
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <div class="layui-input-block">
+                <button class="layui-btn xxx" lay-submit lay-filter="formDemo">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 脚本 -->
+<script>
+  layui.use(['form'], function() {
+    var form = layui.form,
+      $ = layui.jquery;
+    form.render();
+    var menuId = getQueryString("id");
+
+    if (menuId){
+      console.log('修改'+menuId);
+    } else {
+      console.log('添加'+menuId);
+    }
+    //监听提交
+    form.on('submit(formDemo)', function(data) {
+      console.log(data.field);
+
+
+      $.post('/api/submitForm', data.field, function(res) {
+        console.log(res);
+        layer.msg(res.success ? res.msg : '提交失败.');
+      }, 'json');
+      return false;
+    });
+  });
+
+  function getQueryString(name){
+    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg);
+    if(r!=null)return  unescape(r[2]); return null;
+  }
+</script>
+<!-- 样式 -->
+<style scoped>
+
+</style>
