@@ -12,24 +12,28 @@
               <div class="layui-input-inline">
                 <input type="text" name="title" required lay-verify="required" placeholder="请输入菜单名称" autocomplete="off" class="layui-input">
               </div>
+              <div class="layui-form-mid layui-word-aux">必填</div>
             </div>
             <div class="layui-form-item">
               <label class="layui-form-label">访问路径</label>
               <div class="layui-input-inline">
                 <input type="text" name="path" required lay-verify="required" placeholder="请输入访问路径" autocomplete="off" class="layui-input">
               </div>
+              <div class="layui-form-mid layui-word-aux">必填</div>
             </div>
             <div class="layui-form-item">
             <label class="layui-form-label">页面路径</label>
             <div class="layui-input-inline">
               <input type="text" name="component" required lay-verify="required" placeholder="请输入页面路径" autocomplete="off" class="layui-input">
             </div>
-          </div>
+              <div class="layui-form-mid layui-word-aux">必填</div>
+            </div>
             <div class="layui-form-item">
               <label class="layui-form-label">显示顺序</label>
               <div class="layui-input-inline">
                 <input type="text" name="sort" required lay-verify="required" placeholder="请输入显示顺序" autocomplete="off" class="layui-input">
               </div>
+              <div class="layui-form-mid layui-word-aux">必填</div>
             </div>
             <div class="layui-form-item">
               <label class="layui-form-label">是否展开</label>
@@ -61,13 +65,6 @@
     var form = layui.form,
       $ = layui.jquery;
     form.render();
-    var menuId = getQueryString("id");
-
-    if (menuId){
-      console.log('修改'+menuId);
-    } else {
-      console.log('添加'+menuId);
-    }
     //监听提交
     form.on('submit(formDemo)', function(data) {
       console.log(data.field);

@@ -3,12 +3,11 @@ package com.pbw.cms.controller;
 import com.pbw.cms.entity.Menu;
 import com.pbw.cms.entity.ResultMsg;
 import com.pbw.cms.repository.MenuRepository;
+import com.pbw.cms.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,6 +23,9 @@ public class MenuController {
     @Autowired
     private MenuRepository menuRepository;
 
+    @Autowired
+    private MenuService menuService;
+
     @GetMapping("/listAllParent")
     @ResponseBody
     public ResultMsg<List<Menu>> findAllParentMenu(){
@@ -38,5 +40,24 @@ public class MenuController {
         return  new ResultMsg<>(0,"ok",menus);
     }
 
+    @PostMapping("/add")
+    @ResponseBody
+    public ResultMsg add(@RequestBody Menu menu){
+          Menu save = menuRepository.save(menu);
+        return new ResultMsg(0,"ok",save);
+    }
 
+    @PutMapping("/update")
+    @ResponseBody
+    public ResultMsg update(Menu menu){
+        Menu save = menuRepository.save(menu);
+        return new ResultMsg(0,"ok",save);
+    }
+
+    @DeleteMapping("delete/{id}")
+    @ResponseBody
+    public ResultMsg delete(@PathVariable Long id){
+        menuService.deleteMenuAndChildren(id);
+        return new ResultMsg(0,"ok",null);
+    }
 }

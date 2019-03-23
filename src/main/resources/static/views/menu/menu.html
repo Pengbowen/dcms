@@ -2,43 +2,83 @@
 <link rel="stylesheet" href="/css/treetable.css">
 <div class="layui-fluid">
 
-        <h1 id="test">
-            Layui树形表格treetable -
-            <small><a href="https://gitee.com/whvse/treetable-lay" target="_blank">项目地址</a></small>
-        </h1>
-        <br>
         <div class="layui-btn-group">
+            <button class="layui-btn" id="btn-add-child" >添加菜单</button>
             <button class="layui-btn" id="btn-expand">全部展开</button>
             <button class="layui-btn" id="btn-fold">全部折叠</button>
             <button class="layui-btn" id="btn-refresh">刷新表格</button>
         </div>
-        <div class="layui-btn-group">
-            <a class="layui-btn layui-btn-normal" href="menu.html">菜单管理</a>
-            <a class="layui-btn layui-btn-normal" href="test.html">深度测试</a>
-            <a class="layui-btn layui-btn-normal" href="test2.html">自定义图标</a>
-            <a class="layui-btn layui-btn-normal" href="test3.html">多表格</a>
-            <a class="layui-btn layui-btn-normal" href="test5.html">搜索功能</a>
-        </div>
         <table id="table1" class="layui-table" lay-filter="table1"></table>
     <!-- 操作列 -->
     <script type="text/html" id="oper-col">
-        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
-        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        <div class="layui-btn-group">
+        <button class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</button>
+        <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</button>
+        </div>
     </script>
 
 </div>
-<div class="box" id="sdseadvd234">
-    <form class="layui-form  edit_box" id="edit_box" action="">
+<div class="box" id="sdseadvd234" style="display: none">
+    <form class="layui-form  edit_box" id="editForm" lay-filter="menu_form" style="margin-top: 10px" id="edit_box" action="">
+        <input type="text" name="id" id="menuId" class="layui-input layui-hide">
         <div class="layui-form-item">
-            <label class="layui-form-label">单行输入框</label>
+            <label class="layui-form-label">父菜单</label>
+            <div class="layui-input-inline">
+                <select name="pid" id="menuParent" lay-verify="required" >
+                    <option value="0">根节点</option>
+                </select>
+            </div>
+            <div class="layui-form-mid layui-word-aux">必填</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">菜单名称</label>
+            <div class="layui-input-inline">
+                <input type="text" name="title" id="menuTitle" lay-verify="required" autocomplete="off" placeholder="请输入菜单名称" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">必填</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">访问路径</label>
+            <div class="layui-input-inline">
+                <input type="text" name="path" id="menuPath" lay-verify="path" autocomplete="off" placeholder="请输入访问路径" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">必填</div>
+
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">页面路径</label>
+            <div class="layui-input-inline">
+                <input type="text" name="component" lay-verify="required" autocomplete="off" placeholder="请输入页面路径" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">必填</div>
+
+
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">显示序号</label>
+            <div class="layui-input-inline">
+                <input type="text" name="sort" id="menuSort" lay-verify="number" autocomplete="off" placeholder="请输入显示顺序" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">必填</div>
+
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">是否展开</label>
             <div class="layui-input-block">
-                <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input">
+                <input type="checkbox" name="open"  id="menuOpen" value="true"lay-skin="switch">
+            </div>
+
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">是否新标签页打开</label>
+            <div class="layui-input-block">
+                <input type="checkbox" name="blank" id="menuBlank" lay-skin="switch">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">验证必填项</label>
             <div class="layui-input-block">
-                <input type="text" name="username" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+                <button class="layui-btn xxx" lay-submit lay-filter="formSubmit">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary" id="resetBtn">重置</button>
             </div>
         </div>
     </form>
@@ -46,12 +86,13 @@
 <script>
     layui.config({
         base: '/js/'
-    }).use(['layer', 'table', 'treetable'], function () {
+    }).use(['layer', 'table', 'treetable','form'], function () {
         var $ = layui.jquery;
         var table = layui.table;
         var layer = layui.layer;
         var treetable = layui.treetable;
-
+        var form = layui.form;
+        var axios = layui.axios;
         // 渲染表格
         var renderTable = function () {
             layer.load(2);
@@ -75,7 +116,7 @@
                     {field: 'component', title: '页面路径'},
                     {field: 'open', title: '是否展开'},
                     {field: 'blank', title: '是否打开新页面'},
-                    {templet: '#oper-col', title: 'oper'}
+                    {templet: '#oper-col', title: '操作'}
                 ]],
                 done: function () {
                     layer.closeAll('loading');
@@ -97,45 +138,157 @@
             renderTable();
         });
 
+        $('#btn-add-child').click(function () {
+            layer.open({
+                type:1,
+                title:'添加菜单',
+                content:$('#sdseadvd234'),
+                area:['400px','500px'],
+                success:function(layero) {
+                    var mask = $(".layui-layer-shade");
+                    mask.appendTo(layero.parent());
+                    var url = '/menu/listAllParent';
+                    var html = '<option value="0">根节点</option>';
+                    axios.get(url)
+                        .then(function (response) {
+                            var menuData = response.data.data;
+                            $.each(menuData,function (i,v) {
+                                html += '<option value="'+v.id+'">'+v.title+'</option>';
+                            })
+                            $('#menuParent').empty().html(html);
+                            console.log( menuData)
+                            form.render();
+                        })
+                        .catch(function (error) {
+
+                        })
+                }
+            })
+        });
+
         //监听工具条
         table.on('tool(table1)', function (obj) {
             var data = obj.data;
             var layEvent = obj.event;
-
             if (layEvent === 'del') {
-                layer.msg('删除' + data.id);
+                deleteMenu(data);
             } else if (layEvent === 'edit') {
-
-                layer.open({
-                    type:1,
-                    closeBtn: false,
-                    area: '300px;',
-                    id: 'LAY_layuipro_hash' //设定一个id，防止重复弹出
-                    ,
-                    btn: ['火速围观', '残忍拒绝'],
-                    btnAlign: 'c',
-                    moveType: 1 //拖拽模式，0或者1
-                    ,
-                    content:$('#sdseadvd234'),
-                    shade:false,
-                    success:function(layero) {
-                        var mask = $(".layui-layer-shade");
-                        mask.appenTo($('#sdseadvd234').parent());
-                        //其中：layero是弹层的DOM对象
-                    }
-                    })
-                // layui.sidebar.render({
-                //     elem: this,
-                //     //content:'',
-                //     title: '修改菜单信息',
-                //     shade: true,
-                //     // shadeClose:false,
-                //     // direction: 'left'
-                //     dynamicRender: true,
-                //     url: 'views/form/menu.html?id='+data.id,
-                //     width: '25%', //可以设置百分比和px
-                // });
+                editMenu(data);
             }
         });
+
+
+        //监听提交
+        form.on('submit(formSubmit)', function(data) {
+            //如果id为空则为添加,否则为编辑
+            debugger
+            if (data.field.id == ''){
+                addMenu(data);
+            } else {
+                updateMenu(data);
+            }
+            return false;
+        });
+        //定义验证规则
+        form.verify({
+            //只有在子节点才必须输入
+            path:function (value,item) {
+                var pid = $('#menuParent').val();
+                if(pid != 0 && value==""){
+                    return '访问路径不能为空!';
+                }
+            }
+        });
+        //删除菜单
+        function deleteMenu(data) {
+            var msg = '';
+            if (data.pid == 0){
+                msg = '(包含其所有子菜单)';
+            }
+            layer.confirm('确认删除此菜单吗'+msg+'？', {
+                btn: ['确认','取消'] //按钮
+            }, function(){
+                var deletUrl = '/menu/delete/'+data.id;
+                axios.delete(deletUrl).then(function (response) {
+                    var resData = response.data;
+                    if (resData.code == 0){
+                        layer.msg("删除成功",{
+                            icon:1,
+                            end:function () {
+                                renderTable();
+                            }
+                        });
+                    }
+                }).catch(function (reason) {
+
+                })
+            });
+        }
+        //编辑菜单
+        function editMenu(data) {
+            layer.open({
+                type:1,
+                title:'编辑菜单',
+                content:$('#sdseadvd234'),
+                area:['400px','500px'],
+                success:function(layero) {
+                    var mask = $(".layui-layer-shade");
+                    mask.appendTo(layero.parent());
+                    var url = '/menu/listAllParent';
+                    var html = '<option value="0">根节点</option>';
+                    axios.get(url)
+                        .then(function (response) {
+                            var menuData = response.data.data;
+                            $.each(menuData,function (i,v) {
+                                html += '<option value="'+v.id+'">'+v.title+'</option>';
+                            })
+                            $('#menuParent').empty().html(html);
+                            form.val("menu_form", data);
+                            form.render();
+                        })
+                        .catch(function (error) {
+                            layer.msg('网络错误!', {icon: 5});
+                        })
+                }
+            });
+        }
+        //添加菜单
+        function addMenu(data) {
+            var url = '/menu/add';
+            axios.post(url, data.field).then(function (response) {
+                var resData = response.data;
+                layer.closeAll();
+                if (resData.code == 0){
+                    layer.msg("添加成功",{
+                        icon:1,
+                        end:function () {
+                            $('#resetBtn').click();
+                            renderTable();
+                        }
+                    });
+                }
+            }).catch(function (error) {
+                layer.msg('网络错误!', {icon: 5});
+            });
+        }
+        //更新菜单
+        function updateMenu(data) {
+            var url = '/menu/update';
+            axios.put(url, data.field).then(function (response) {
+                var resData = response.data;
+                layer.closeAll();
+                if (resData.code == 0){
+                    layer.msg("修改成功",{
+                        icon:1,
+                        end:function () {
+                            $('#resetBtn').click();
+                            renderTable();
+                        }
+                    });
+                }
+            }).catch(function (error) {
+                layer.msg('网络错误!', {icon: 5});
+            });
+        }
     });
 </script>

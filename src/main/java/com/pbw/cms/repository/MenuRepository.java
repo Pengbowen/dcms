@@ -2,6 +2,9 @@ package com.pbw.cms.repository;
 
 import com.pbw.cms.entity.Menu;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -12,4 +15,8 @@ import java.util.List;
  **/
 public interface MenuRepository extends JpaRepository<Menu,Long> {
    List<Menu> findByPidEqualsOrderBySort(final Long pid);
+   @Modifying
+   @Transactional
+   @Query(value = "delete from menu where id = ?1 or pid = ?1",nativeQuery = true)
+   void deleteAllByIdIsOrPidIs(long id);
 }
