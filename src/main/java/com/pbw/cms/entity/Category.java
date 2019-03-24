@@ -5,6 +5,7 @@ import lombok.experimental.Accessors;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * @Description 类别
@@ -21,6 +22,13 @@ public class Category {
     @GeneratedValue
     private Long id;
 
+    private Long pid;
+
     @Column
     private Long categoryName;
+
+    @OneToMany(fetch = FetchType.EAGER,cascade=CascadeType.REMOVE)
+    @JoinColumn(name = "pid",insertable = false,updatable = false)
+    private List<Category> children;
+
 }

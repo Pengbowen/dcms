@@ -149,9 +149,8 @@
             limit: 18,
             // 点击回调
             click: function (data) {
-                console.log(data);
+                //console.log(data);
                 $('#iconInput').val(data.icon);
-                console.log($("#iconInput").val());
             }
         });
 
@@ -161,8 +160,6 @@
          * @param iconName 图标名称，自动识别fontClass/unicode
          */
        // iconPicker.checkIcon('iconPicker', 'layui-icon-star-fill');
-
-
         $('#btn-expand').click(function () {
             treetable.expandAll('#table1');
         });
@@ -193,7 +190,7 @@
                                 html += '<option value="'+v.id+'">'+v.title+'</option>';
                             })
                             $('#menuParent').empty().html(html);
-                            console.log( menuData)
+                            //console.log( menuData)
                             form.render();
                         })
                         .catch(function (error) {
