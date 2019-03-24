@@ -192,7 +192,8 @@ layui.define(['jquery', 'utils', 'axios'], function(exports) { //提示：模块
           } else {
             temp.push('<a href="' + href + '">');
           }
-          temp.push('<i class="layui-icon">' + item.icon + '</i> ');
+          //修改icon的渲染方式 由原来的 '##xe631;' 替换为 class 'layui-icon-rate'
+          temp.push('<i class="layui-icon ' + item.icon + '"></i> ');
           temp.push('<span>' + item.title + '</span>');
           temp.push('</a>');
           var children = item.children;

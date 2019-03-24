@@ -18,7 +18,7 @@
     </script>
 
 </div>
-<div class="box" id="sdseadvd234" style="display: none">
+<div class="box" id="editBtn" style="display: none">
     <form class="layui-form  edit_box" id="editForm" lay-filter="menu_form" style="margin-top: 10px" id="edit_box" action="">
         <input type="text" name="id" id="menuId" class="layui-input layui-hide">
         <div class="layui-form-item">
@@ -48,7 +48,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">页面路径</label>
             <div class="layui-input-inline">
-                <input type="text" name="component" lay-verify="required" autocomplete="off" placeholder="请输入页面路径" class="layui-input">
+                <input type="text" name="component" lay-verify="path" autocomplete="off" placeholder="请输入页面路径" class="layui-input">
             </div>
             <div class="layui-form-mid layui-word-aux">必填</div>
 
@@ -60,8 +60,16 @@
                 <input type="text" name="sort" id="menuSort" lay-verify="number" autocomplete="off" placeholder="请输入显示顺序" class="layui-input">
             </div>
             <div class="layui-form-mid layui-word-aux">必填</div>
-
         </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">图标</label>
+            <div class="layui-input-inline">
+                <input type="text" name="icon"  id="iconInput" lay-filter="iconInput" class="layui-input">
+            </div>
+        </div>
+
+
         <div class="layui-form-item">
             <label class="layui-form-label">是否展开</label>
             <div class="layui-input-block">
@@ -86,13 +94,14 @@
 <script>
     layui.config({
         base: '/js/'
-    }).use(['layer', 'table', 'treetable','form'], function () {
+    }).use(['iconPicker','treetable','jquery','table','layer','form','axios'], function () {
         var $ = layui.jquery;
         var table = layui.table;
         var layer = layui.layer;
         var treetable = layui.treetable;
         var form = layui.form;
         var axios = layui.axios;
+        var iconPicker = layui.iconPicker;
         // 渲染表格
         var renderTable = function () {
             layer.load(2);
@@ -111,7 +120,7 @@
                     {field: 'title', title: '菜单名称'},
                     {field: 'id', title: 'id'},
                     {field: 'path', title: '访问路径'},
-                    {field: 'icon', title: '图标'},
+                    {field: 'icon', title: '图标',templet: '<div><i  class="layui-icon {{d.icon}}"></i></div>'},
                     {field: 'sort', title: '顺序号'},
                     {field: 'component', title: '页面路径'},
                     {field: 'open', title: '是否展开'},
@@ -125,6 +134,34 @@
         };
 
         renderTable();
+
+        /*渲染图标选择器*/
+        iconPicker.render({
+            // 选择器，推荐使用input
+            elem: '#iconInput',
+            // 数据类型：fontClass/unicode，推荐使用fontClass
+            type: 'fontClass',
+            // 是否开启搜索：true/false
+            search: false,
+            // 是否开启分页
+            page: true,
+            // 每页显示数量，默认12
+            limit: 18,
+            // 点击回调
+            click: function (data) {
+                console.log(data);
+                $('#iconInput').val(data.icon);
+                console.log($("#iconInput").val());
+            }
+        });
+
+        /**
+         * 选中图标 （常用于更新时默认选中图标）
+         * @param filter lay-filter
+         * @param iconName 图标名称，自动识别fontClass/unicode
+         */
+       // iconPicker.checkIcon('iconPicker', 'layui-icon-star-fill');
+
 
         $('#btn-expand').click(function () {
             treetable.expandAll('#table1');
@@ -142,8 +179,8 @@
             layer.open({
                 type:1,
                 title:'添加菜单',
-                content:$('#sdseadvd234'),
-                area:['400px','500px'],
+                content:$('#editBtn'),
+                area:['400px','600px'],
                 success:function(layero) {
                     var mask = $(".layui-layer-shade");
                     mask.appendTo(layero.parent());
@@ -181,7 +218,6 @@
         //监听提交
         form.on('submit(formSubmit)', function(data) {
             //如果id为空则为添加,否则为编辑
-            debugger
             if (data.field.id == ''){
                 addMenu(data);
             } else {
@@ -229,8 +265,8 @@
             layer.open({
                 type:1,
                 title:'编辑菜单',
-                content:$('#sdseadvd234'),
-                area:['400px','500px'],
+                content:$('#editBtn'),
+                area:['400px','600px'],
                 success:function(layero) {
                     var mask = $(".layui-layer-shade");
                     mask.appendTo(layero.parent());
@@ -243,7 +279,10 @@
                                 html += '<option value="'+v.id+'">'+v.title+'</option>';
                             })
                             $('#menuParent').empty().html(html);
+                            //赋值数据
                             form.val("menu_form", data);
+                            //图标需要单独赋值
+                            iconPicker.checkIcon('iconInput',data.icon);
                             form.render();
                         })
                         .catch(function (error) {

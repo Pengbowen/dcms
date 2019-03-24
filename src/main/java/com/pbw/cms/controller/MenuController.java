@@ -49,8 +49,8 @@ public class MenuController {
 
     @PutMapping("/update")
     @ResponseBody
-    public ResultMsg update(Menu menu){
-        Menu save = menuRepository.save(menu);
+    public ResultMsg update(@RequestBody Menu menu){
+        Menu save = menuRepository.saveAndFlush(menu);
         return new ResultMsg(0,"ok",save);
     }
 

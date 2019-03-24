@@ -115,7 +115,7 @@ layui.define(mods, function(exports) {
   }
 
   var  _private = {
-    routeInit: async function(config) {
+    routeInit: function(config) {
       var that = this;
       // route.set({
       //   beforeRender: function (route) {
@@ -400,7 +400,7 @@ layui.define(mods, function(exports) {
         });
       }
     },
-    menuInit: async function(config) {
+    menuInit: function(config) {
       var that = this;
       // 配置menu
       menu.set({
@@ -428,7 +428,7 @@ layui.define(mods, function(exports) {
                              //     v.path = '#'+v.path;
                              //   })
                              // });
-                             console.log(obj.data);
+                            console.log(obj.data);
                             return obj.data;
            }
         },

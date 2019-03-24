@@ -51,7 +51,7 @@ public class Menu {
 
 
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "pid")
+    @OneToMany(fetch = FetchType.EAGER,cascade=CascadeType.REMOVE)
+    @JoinColumn(name = "pid",insertable = false,updatable = false)
     private List<Menu> children;
 }
