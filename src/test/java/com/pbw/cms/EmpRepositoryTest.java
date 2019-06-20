@@ -2,7 +2,7 @@ package com.pbw.cms;
 
 import com.alibaba.fastjson.JSONObject;
 import com.pbw.cms.entity.Employee;
-import com.pbw.cms.repository.EmpRepository;
+import com.pbw.cms.dao.EmpRepository;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

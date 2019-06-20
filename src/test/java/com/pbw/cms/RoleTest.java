@@ -1,7 +1,7 @@
 package com.pbw.cms;
 
 import com.pbw.cms.entity.Role;
-import com.pbw.cms.repository.RoleRepository;
+import com.pbw.cms.dao.RoleRepository;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

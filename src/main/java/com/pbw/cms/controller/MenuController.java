@@ -2,7 +2,7 @@ package com.pbw.cms.controller;
 
 import com.pbw.cms.entity.Menu;
 import com.pbw.cms.entity.ResultMsg;
-import com.pbw.cms.repository.MenuRepository;
+import com.pbw.cms.dao.MenuRepository;
 import com.pbw.cms.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;

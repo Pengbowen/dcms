@@ -1,9 +1,10 @@
 package com.pbw.cms.service.impl;
 
 import com.pbw.cms.entity.Menu;
-import com.pbw.cms.repository.MenuRepository;
+import com.pbw.cms.dao.MenuRepository;
 import com.pbw.cms.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,7 +25,9 @@ public class MenuServiceImpl implements MenuService {
     public void deleteMenuAndChildren(long id) {
         menuRepository.deleteAllByIdIsOrPidIs(id);
     }
+
     @Override
+
     public List<Menu> findAll() {
         return menuRepository.findAll();
     }

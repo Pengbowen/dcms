@@ -1,7 +1,7 @@
 package com.pbw.cms;
 
 import com.pbw.cms.entity.Menu;
-import com.pbw.cms.repository.MenuRepository;
+import com.pbw.cms.dao.MenuRepository;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.pbw.cms.repository;
+package com.pbw.cms.dao;
 
 import com.pbw.cms.entity.EmpWork;
 import org.springframework.data.jpa.repository.JpaRepository;

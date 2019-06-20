@@ -22,10 +22,11 @@ public class Category {
     @GeneratedValue
     private Long id;
 
+    @Column
     private Long pid;
 
     @Column
-    private Long categoryName;
+    private String categoryName;
 
     @OneToMany(fetch = FetchType.EAGER,cascade=CascadeType.REMOVE)
     @JoinColumn(name = "pid",insertable = false,updatable = false)

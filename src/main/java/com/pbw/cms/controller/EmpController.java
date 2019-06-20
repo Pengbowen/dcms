@@ -1,7 +1,7 @@
 package com.pbw.cms.controller;
 
 import com.pbw.cms.entity.Employee;
-import com.pbw.cms.repository.EmpRepository;
+import com.pbw.cms.dao.EmpRepository;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

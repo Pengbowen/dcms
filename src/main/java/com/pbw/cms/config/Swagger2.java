@@ -26,7 +26,6 @@ public class Swagger2 {
                 .paths(PathSelectors.any())
                 .build();
     }
-
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("springboot利用swagger构建api文档")
@@ -35,4 +34,5 @@ public class Swagger2 {
                 .version("1.0")
                 .build();
     }
+
 }
